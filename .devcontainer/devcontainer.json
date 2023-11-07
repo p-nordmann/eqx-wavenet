@@ -1,0 +1,39 @@
+{
+    "name": "eqx-wavenet",
+    "dockerFile": "Dockerfile",
+    "postCreateCommand": "sh .devcontainer/post_install.sh",
+    "runArgs": [
+        "--network=host",
+        "--gpus=all"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "tamasfe.even-better-toml"
+            ],
+            "settings": {
+                "python.formatting.provider": "black",
+                "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": true
+                    }
+                },
+                "files.exclude": {
+                    "**/.git": true,
+                    "**/.svn": true,
+                    "**/.hg": true,
+                    "**/CVS": true,
+                    "**/.DS_Store": true,
+                    "**/Thumbs.db": true,
+                    "**/*.egg-info": true,
+                    "**/.pytest_cache": true,
+                    "**/__pycache__": true
+                }
+            }
+        }
+    }
+}
