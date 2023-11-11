@@ -54,7 +54,6 @@ class Wavenet(eqx.Module):
     def __call__(
         self,
         x: Float32[Array, " time size_in"],
-        *,
         enable_dropout: bool = False,
         key: PRNGKeyArray | None = None,
     ) -> Float32[Array, " time size_out"]:
@@ -66,9 +65,5 @@ class Wavenet(eqx.Module):
         out = jax.nn.relu(sum_out)
         return jax.vmap(
             self.wavenet_head,
-            in_axes=[1, None, None],
-        )(
-            out,
-            enable_dropout,
-            key,
-        )
+            in_axes=(1, None, None),
+        )(out, enable_dropout, key)

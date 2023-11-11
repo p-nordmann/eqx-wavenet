@@ -31,7 +31,6 @@ class WavenetHead(eqx.Module):
     def __call__(
         self,
         x: Float32[Array, " size_layers"],
-        *,
         enable_dropout: bool = False,
         key: PRNGKeyArray | None = None,
     ) -> Float32[Array, " size_out"]:
