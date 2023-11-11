@@ -1,14 +1,7 @@
 import jax
 import jax.numpy as jnp
-import pytest
 
 from eqx_wavenet.normalization import RMSLayerNorm
-
-
-@pytest.fixture(scope="session")
-def jax_cpu():
-    with jax.default_device(jax.devices("cpu")[0]):
-        yield
 
 
 def test_rms_layernorm():
