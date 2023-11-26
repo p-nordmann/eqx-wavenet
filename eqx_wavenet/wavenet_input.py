@@ -1,11 +1,15 @@
 import equinox as eqx
+import jax
 import jax.numpy as jnp
 from beartype import beartype
 from jaxtyping import Array, Float32, PRNGKeyArray, jaxtyped
 
+from .normalization import RMSLayerNorm
+
 
 class WavenetInput(eqx.Module):
     conv: eqx.nn.Conv1d
+    norm: RMSLayerNorm
 
     def __init__(
         self,
@@ -22,10 +26,12 @@ class WavenetInput(eqx.Module):
             padding=[(input_kernel_size - 1, 0)],
             key=key,
         )
+        self.norm = RMSLayerNorm(size_in)
 
     @jaxtyped
     @beartype
     def __call__(
         self, x: Float32[Array, " time size_in"]
     ) -> Float32[Array, " size_layers time"]:
-        return self.conv(jnp.transpose(x))
+        x_normalized = jax.vmap(self.norm)(x)
+        return self.conv(jnp.transpose(x_normalized))
