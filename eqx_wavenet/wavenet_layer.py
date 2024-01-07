@@ -27,22 +27,17 @@ class PointWiseConv(eqx.Module):
         key: PRNGKeyArray,
     ):
         self.weight = jnp.sqrt(2 / size_out) * jax.random.normal(
-            key=key, shape=(size_out, size_in, 1)
+            key=key, shape=(size_out, size_in)
         )
         self.padding = padding
 
     def __call__(
         self, x: Float32[Array, " size_in time"]
     ) -> Float32[Array, " size_out _"]:
-        return jnp.squeeze(
-            jax.lax.conv_general_dilated(
-                lhs=jnp.expand_dims(x, axis=0),
-                rhs=self.weight,
-                window_strides=[1],
-                padding=[self.padding] if self.padding else [(0, 0)],
-            ),
-            axis=0,
-        )
+        y = jnp.dot(self.weight, x)
+        if self.padding:
+            return jnp.pad(y, [(0, 0), self.padding])
+        return y
 
 
 class PreGatedConv(eqx.Module):
