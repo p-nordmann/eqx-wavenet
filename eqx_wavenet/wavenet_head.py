@@ -24,7 +24,7 @@ class WavenetHead(eqx.Module):
         self.linear_in = eqx.nn.Linear(size_layers, size_hidden, key=key_1)
         self.linear_out = eqx.nn.Linear(size_hidden, size_out, key=key_2)
         self.norm = RMSLayerNorm(size_layers)
-        self.dropout = eqx.nn.Dropout()
+        self.dropout = eqx.nn.Dropout(p=0.1)
 
     @jaxtyped
     @beartype
